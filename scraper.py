@@ -20,7 +20,6 @@ class CSScraper:
         with urllib.request.urlopen(full_calendar_url) as response:
             html = response.read()
         soup = BeautifulSoup(html, "html.parser")
-        soup.prettify()
 
         # Get element containing all events
         elem = soup.find(id="list-type-2")
@@ -48,7 +47,22 @@ class CSScraper:
                 title_tag = time_tag.parent.parent.next_sibling
                 title_string = title_tag.string
 
-                retval.append((date_string, time_text, loc_text, title_string))
+                event_url = title_tag.find("a").get("href")
+                event_url = "https://calendars.illinois.edu" + event_url
+
+                with urllib.request.urlopen(event_url) as response:
+                    detailed_page = response.read()
+                soup = BeautifulSoup(detailed_page, "html.parser")
+                content = soup.find("dd", attrs={"class":"ws-description"})
+                if content == None:
+                    content = ""
+                else:
+                    content = content.get_text().replace(u"\xa0", u" ")
+                    content = content.replace("  ", " ")
+                    content = content.replace("\n", " ")
+
+                retval.append((date_string, time_text, loc_text, 
+                        title_string, content))
 
             h2_tag = ul_tag.next_sibling
             if h2_tag == None:
