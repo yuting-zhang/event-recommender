@@ -6,6 +6,41 @@ import datetime
 
 class CSScraper:
 
+    def get_las_set(self):
+        years = [2017]#[i for i in range(2005, 2019)]
+        months = [i for i in range(1, 13)]
+        last_days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+        dataset = []
+        for year in years:
+            print("Crawling Year " + str(year))
+            for month in months:
+                print("Crawling Month " + str(month))
+                url = "https://calendars.illinois.edu/search/1249?go=" + \
+                      "go&listType=summary&startDate=" + \
+                      str(month) + \
+                      "%2F" +  \
+                      "1" + \
+                      "%2F" + \
+                      str(year) + \
+                      "&endDate=" + \
+                      str(month) + \
+                      "%2F" + \
+                      str(last_days[month - 1]) + \
+                      "%2F" + \
+                      str(year) + \
+                      "&searchEventType=&KEYWORDS="
+
+                with urllib.request.urlopen(url) as response:
+                    html = response.read()
+                soup = BeautifulSoup(html, "html.parser")
+
+                dataset_year = self.crawl_events_search(soup)
+                if len(dataset_year) > 0:
+                    dataset += dataset_year
+
+        self.write_csv(dataset, "las-train.csv")
+
     def get_training_set(self):
         years = [i for i in range(2005, 2019)]
         months = [i for i in range(1, 13)]
@@ -170,5 +205,6 @@ class CSScraper:
 
 if __name__ == "__main__":
     cs_scrapper = CSScraper()
-    cs_scrapper.get_training_set()
+    #cs_scrapper.get_training_set()
 #    cs_scrapper.get_latest()
+    cs_scrapper.get_las_set()
