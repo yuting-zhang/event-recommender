@@ -115,7 +115,7 @@ class CSScraper:
                 try:
                     pattern = re.compile(
                         "<li class=\"date\">(.*?)<br/>" +
-                        "([0-9]+?)/([0-9]+?)/([0-9]+?).*?</li>")
+                        "([0-9]+?)/([0-9]+?)/([0-9][0-9][0-9][0-9]).*?</li>")
 
                     time, m, d, y = pattern.findall(time_text)[0]
 
@@ -171,4 +171,4 @@ class CSScraper:
 if __name__ == "__main__":
     cs_scrapper = CSScraper()
     cs_scrapper.get_training_set()
-    cs_scrapper.get_latest()
+#    cs_scrapper.get_latest()
