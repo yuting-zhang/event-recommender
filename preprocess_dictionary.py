@@ -1,4 +1,5 @@
 import utility
+import csv
 
 fi = open("dictionary.txt", "r")
 fo = open("stemmed_dictionary.txt", "w")
@@ -6,11 +7,17 @@ fo = open("stemmed_dictionary.txt", "w")
 words = fi.readlines()
 # Removing '\n'
 for i in range(len(words)):
-    if words[-1] == '\n':
+    if words[i][-1] == '\n':
         words[i] = words[i][:-1]
+dictionary = set(words)
 
-words = utility.remove_stopwords(words)
-words = utility.stem(words)
+with open('cs-train.csv', 'r') as csvfile:
+    reader = csv.reader(csvfile, delimiter=',')
+    for row in reader:
+        dictionary |= set(row)
 
-for word in words:
+dictionary = utility.remove_stopwords(dictionary)
+dictionary = utility.stem(dictionary)
+
+for word in dictionary:
     fo.write("%s\n" % word)
