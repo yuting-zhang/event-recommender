@@ -9,6 +9,10 @@ class BM25:
     def get_idf(self, query_word):
         return (num_docs-docs_containing_word[query_word]+0.5)/(docs_containing_word[query_word]+0.5)
 
+    def get_score_single(self, f, query_word, doc_len, avg_doc_len):
+        idf = get_idf(query_word)
+        return idf*(f*(k1+1))/(f+k1*(1-b+b*doc_len/avg_doc_len))
+
     def get_score(self, doc, query_vec):
         idf_vec = idf(query_vec)
 
@@ -31,4 +35,6 @@ class BM25:
                 
 
 if __name__ == "__main__":
+    with open(filename) as csvfile:
+        readCSV = csv.reader(csvfile, delimiter=',')
     bm25 = BM25()
