@@ -25,10 +25,17 @@ SECRET_KEY = 'g=c44()x^mr8*41s%ur&gx2m3xis^!wzbf^85y(ugom-cfb=)h'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+TEMPLATE_DIR = os.path.join(BASE_DIR,'templates')
+
 ALLOWED_HOSTS = []
 
 
 # Application definition
+
+TEMPLATES = [
+{
+    'DIRS': [TEMPLATE_DIR,],
+},]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
