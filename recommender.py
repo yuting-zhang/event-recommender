@@ -1,5 +1,6 @@
 import csv
 from bm25 import BM25
+from operator import itemgetter
 
 UNK = "__UNKNOWN_WORD_TOKEN__"
 
@@ -9,7 +10,7 @@ class Recommender:
         self.init_docs_data(train_ratio)
         self.init_dict_data()
         self.init_user_data()
-        self.bm25 = BM25(self.train_docs)
+        self.bm25 = BM25(self.train_docs_stemmed)
 
     def init_docs_data(self, train_ratio):
         # load data
@@ -64,6 +65,8 @@ class Recommender:
                  open("user-list.csv", "r") as user_csv:
                 data_reader = csv.DictReader(data_csv)
                 for username, data in zip(user_csv, data_reader):
+                    for key in data:
+                        data[key] = float(data[key])
                     self.user_data[username.strip()] = data
         except IOError:
             print("Cannot find user data. Assume empty database.")
@@ -72,10 +75,13 @@ class Recommender:
     add a new user with username
     '''
     def add_new_user(self, username):
+        if username in self.user_data:
+            print("Username already been used")
+            return
         vector = {}
         for word in self.dictionary:
-            vector[word] = 0
-        vector[UNK] = 0
+            vector[word] = 0.0
+        vector[UNK] = 0.0
         self.user_data[username] = vector
 
     '''
@@ -96,22 +102,43 @@ class Recommender:
     '''
     get a list of recommended events for the given user
     '''
-    def get_events(username):
+    def get_events(self, username):
+        if not username in self.user_data:
+            print("No such user")
+            return
+
         scores = []
-        for idx in len(self.test_docs_stemmed):
+        for idx in range(len(self.test_docs_stemmed)):
             doc = self.test_docs_stemmed[idx]
             # currently treat all fields as the same
-            query = {}
+            doc_dict = {}
             for field in doc:
                 for word in field.split():
                     if not word in self.dictionary:
                         word = UNK
-                    if word in query:
-                        query[word] += 1
+                    if word in doc_dict:
+                        doc_dict[word] += 1.0
                     else:
-                        query[word] = 0
+                        doc_dict[word] = 1.0
+
+            score = self.bm25.get_score(doc_dict, self.user_data[username])
+            scores.append([idx, score])
+
+        scores = sorted(scores, key=itemgetter(1), reverse=True)
+        print(scores[:5])
+
+        indices = [cell[0] for cell in scores[:5]]
+        events = [self.test_docs[index] for index in indices]
+        for event in events:
+            print(event)
+        return events
 
 
 if __name__ == "__main__":
     rec = Recommender()
+    rec.add_new_user("yuting")
+    rec.user_data["yuting"]["music"] = 5.0
+    rec.user_data["yuting"]["ICPC"] = 10.0
+    rec.user_data["yuting"]["secur"] = 5.0
+    rec.get_events("yuting")
     rec.save_user_data()
