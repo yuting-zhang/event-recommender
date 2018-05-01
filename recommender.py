@@ -1,11 +1,13 @@
 import csv
 import bm25
 
+UNK = "__UNKNOWN_WORD_TOKEN__"
+
 class Recommender:
 
     def __init__(self, train_ratio = 0.8):
         self.init_docs_data(train_ratio)
-        self.dictionary = self.init_dict_data()
+        self.init_dict_data()
         self.init_user_data()
 
     def init_docs_data(self, train_ratio):
@@ -45,15 +47,18 @@ class Recommender:
 
     def init_dict_data(self):
         # words not in dictionary will be treated as unknown
-        dictionary = set()
+        self.dictionary = set()
         with open("stemmed_dictionary.txt", "r") as dict_file:
             for word in dict_file:
-                dictionary.add(word)
-        return dictionary
+                self.dictionary.add(word)
                 
-
     def init_user_data(self):
-        pass
+        self.user_data = {}
+        with open("user-data.csv", "r") as data_csv,\
+             open("user-list.csv", "r") as user_csv:
+            data_reader = csv.DictReader(data_csv)
+            for username, data in zip(user_csv, data_reader):
+                self.user_data[username.strip()] = data
 
 if __name__ == "__main__":
     rec = Recommender()
