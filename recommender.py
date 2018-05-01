@@ -50,7 +50,7 @@ class Recommender:
         self.dictionary = set()
         with open("stemmed_dictionary.txt", "r") as dict_file:
             for word in dict_file:
-                self.dictionary.add(word)
+                self.dictionary.add(word.strip())
                 
     def init_user_data(self):
         self.user_data = {}
@@ -60,5 +60,25 @@ class Recommender:
             for username, data in zip(user_csv, data_reader):
                 self.user_data[username.strip()] = data
 
+    def add_new_user(self, username):
+        vector = {}
+        for word in self.dictionary:
+            vector[word] = 0
+        vector[UNK] = 0
+        self.user_data[username] = vector
+
+    def save_user_data(self):
+        fieldnames = [UNK] + list(self.dictionary)
+        with open("user-data.csv", "w") as data_csv,\
+             open("user-list.csv", "w") as user_csv:
+            data_writer = csv.DictWriter(data_csv, fieldnames=fieldnames)
+            data_writer.writeheader()
+
+            for username in self.user_data:
+                data_writer.writerow(self.user_data[username])
+                user_csv.write(username + "\n")
+                
+
 if __name__ == "__main__":
     rec = Recommender()
+    rec.save_user_data()
