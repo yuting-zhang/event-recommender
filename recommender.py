@@ -101,11 +101,16 @@ class Recommender:
         for idx in len(self.test_docs_stemmed):
             doc = self.test_docs_stemmed[idx]
             # currently treat all fields as the same
-            query = []
+            query = {}
             for field in doc:
-                query += field.split()
+                for word in field.split():
+                    if not word in self.dictionary:
+                        word = UNK
+                    if word in query:
+                        query[word] += 1
+                    else:
+                        query[word] = 0
 
-            # call bm25
 
 if __name__ == "__main__":
     rec = Recommender()
