@@ -4,7 +4,7 @@ import csv
 import re
 import datetime
 
-class CSScraper:
+class Scraper:
 
     def get_las_set(self):
         years = [2017]#[i for i in range(2005, 2019)]
@@ -41,7 +41,7 @@ class CSScraper:
 
         self.write_csv(dataset, "las-train.csv")
 
-    def get_training_set(self):
+    def get_cs_set(self):
         years = [i for i in range(2005, 2019)]
         months = [i for i in range(1, 13)]
         last_days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
@@ -76,7 +76,7 @@ class CSScraper:
         self.write_csv(dataset, "cs-train.csv")
 
 
-    def get_latest(self):
+    def get_cs_latest(self):
         # Get the calendar page html.
         calendar_url = "https://cs.illinois.edu/calendar"
         with urllib.request.urlopen(calendar_url) as response:
@@ -203,8 +203,3 @@ class CSScraper:
                 break
         return retval
 
-if __name__ == "__main__":
-    cs_scrapper = CSScraper()
-    #cs_scrapper.get_training_set()
-#    cs_scrapper.get_latest()
-    cs_scrapper.get_las_set()
