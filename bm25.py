@@ -1,40 +1,43 @@
 import csv
+import math
 
 class BM25:
     num_docs = 0
     docs_containing_word = {}
-    k1 = 1.5
+    avg_doc_len = 0
+    k = 1.5
     b = 0.75
 
-    def get_idf(self, query_word):
-        return (num_docs-docs_containing_word[query_word]+0.5)/(docs_containing_word[query_word]+0.5)
-
-    def get_score_single(self, f, query_word, doc_len, avg_doc_len):
-        idf = get_idf(query_word)
-        return idf*(f*(k1+1))/(f+k1*(1-b+b*doc_len/avg_doc_len))
-
     def get_score(self, doc, query_vec):
-        idf_vec = idf(query_vec)
-
-    def get_score(self, idf_vec, f_vec, doc_len, avg_doc_len):
-        return idf_vec*(f_vec*(k1+1))/(f_vec + k1*(1-b+b*doc_len/avg_doc_len))
-
-    def f(self, query_word, doc):
-        return doc[query_word]
+        res = 0
+        doc_len = 0
+        for word in doc:
+            doc_len += doc[word]
+        for word in query_vec:
+            if word in doc:
+                res += query_vec[word]*((k+1)*doc[word])*
+                math.log((num_docs+1)/docs_containing_word[word])/
+                (doc[word]+k*(1-b+b*doc_len/avg_doc_len))
+        return res
 
     def __init__(self, docs):
         num_docs = len(docs)
         docs_containing_word = {}
+        avg_doc_len = 0
         for doc in docs:
             for word in doc:
+                avg_doc_len += doc[word]
                 # compute n(q_i)
                 if word in docs_containing_word:
                     docs_containing_word[word] += 1
                 else:
                     docs_containing_word[word] = 1
-                
+        avg_doc_len /= num_docs
 
+
+"""
 if __name__ == "__main__":
     with open(filename) as csvfile:
         readCSV = csv.reader(csvfile, delimiter=',')
     bm25 = BM25()
+    """
