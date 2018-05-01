@@ -15,9 +15,7 @@ class BM25:
             doc_len += doc[word]
         for word in query_vec:
             if word in doc:
-                res += query_vec[word]*((k+1)*doc[word])*
-                math.log((num_docs+1)/docs_containing_word[word])/
-                (doc[word]+k*(1-b+b*doc_len/avg_doc_len))
+                res += query_vec[word]*((k+1)*doc[word])*math.log((num_docs+1)/docs_containing_word[word])/(doc[word]+k*(1-b+b*doc_len/avg_doc_len))
         return res
 
     def __init__(self, docs):
