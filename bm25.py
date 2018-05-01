@@ -8,8 +8,8 @@ class BM25:
         doc_len = 0
         for word in doc:
             doc_len += doc[word]
-        for word in query_vec:
-            if word in doc and word in self.docs_containing_word:
+        for word in doc:
+            if word in query_vec and word in self.docs_containing_word:
                 res += query_vec[word]*((self.k+1)*doc[word])*\
                 math.log((self.num_docs+1)/self.docs_containing_word[word])/\
                 (doc[word]+self.k*(1-self.b+self.b*doc_len/self.avg_doc_len))
