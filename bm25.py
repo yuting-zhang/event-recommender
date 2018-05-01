@@ -26,12 +26,14 @@ class BM25:
         num_docs = len(docs)
         docs_containing_word = {}
         for doc in docs:
-            for word in doc:
-                # compute n(q_i)
-                if word in docs_containing_word:
-                    docs_containing_word[word] += 1
-                else:
-                    docs_containing_word[word] = 1
+            # each doc has a few fields, like title, time, location, description
+            for fields in doc:
+                for word in fields.split():
+                    # compute n(q_i)
+                    if word in docs_containing_word:
+                        docs_containing_word[word] += 1
+                    else:
+                        docs_containing_word[word] = 1
                 
 
 if __name__ == "__main__":

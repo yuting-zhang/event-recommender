@@ -1,5 +1,5 @@
 import csv
-import bm25
+from bm25 import BM25
 
 UNK = "__UNKNOWN_WORD_TOKEN__"
 
@@ -9,6 +9,7 @@ class Recommender:
         self.init_docs_data(train_ratio)
         self.init_dict_data()
         self.init_user_data()
+        self.bm25 = BM25(self.train_docs)
 
     def init_docs_data(self, train_ratio):
         # load data
@@ -51,7 +52,11 @@ class Recommender:
         with open("stemmed_dictionary.txt", "r") as dict_file:
             for word in dict_file:
                 self.dictionary.add(word.strip())
-                
+
+    '''           
+    user-list.csv stores a list of usernames
+    user-data.csv stores user vectors
+    '''
     def init_user_data(self):
         self.user_data = {}
         try:
@@ -63,6 +68,9 @@ class Recommender:
         except IOError:
             print("Cannot find user data. Assume empty database.")
 
+    '''
+    add a new user with username
+    '''
     def add_new_user(self, username):
         vector = {}
         for word in self.dictionary:
@@ -70,6 +78,10 @@ class Recommender:
         vector[UNK] = 0
         self.user_data[username] = vector
 
+    '''
+    CALL THIS BEFORE EXIT
+    save current user data to disk
+    '''
     def save_user_data(self):
         fieldnames = [UNK] + list(self.dictionary)
         with open("user-data.csv", "w") as data_csv,\
@@ -81,6 +93,19 @@ class Recommender:
                 data_writer.writerow(self.user_data[username])
                 user_csv.write(username + "\n")
                 
+    '''
+    get a list of recommended events for the given user
+    '''
+    def get_events(username):
+        scores = []
+        for idx in len(self.test_docs_stemmed):
+            doc = self.test_docs_stemmed[idx]
+            # currently treat all fields as the same
+            query = []
+            for field in doc:
+                query += field.split()
+
+            # call bm25
 
 if __name__ == "__main__":
     rec = Recommender()
