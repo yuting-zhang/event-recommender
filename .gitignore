@@ -1,2 +1,4 @@
 *.swp
 __pycache__
+user-list.csv
+user-data.csv

@@ -54,11 +54,14 @@ class Recommender:
                 
     def init_user_data(self):
         self.user_data = {}
-        with open("user-data.csv", "r") as data_csv,\
-             open("user-list.csv", "r") as user_csv:
-            data_reader = csv.DictReader(data_csv)
-            for username, data in zip(user_csv, data_reader):
-                self.user_data[username.strip()] = data
+        try:
+            with open("user-data.csv", "r") as data_csv,\
+                 open("user-list.csv", "r") as user_csv:
+                data_reader = csv.DictReader(data_csv)
+                for username, data in zip(user_csv, data_reader):
+                    self.user_data[username.strip()] = data
+        except IOError:
+            print("Cannot find user data. Assume empty database.")
 
     def add_new_user(self, username):
         vector = {}
