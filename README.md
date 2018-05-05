@@ -25,7 +25,7 @@ Lan Dao - [contributions to be added]
 
 Shunping Xie - [contributions to be added]
 
-# License
+# MIT License
 
 Copyright (c) 2018 Yuting Zhang, Lan Dao, Shunping Xie
 
