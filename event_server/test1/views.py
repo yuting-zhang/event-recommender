@@ -10,6 +10,7 @@ from django.core.files.base import ContentFile
 
 
 from .models import TestClass
+from .forms import CheckboxForm
 
 # Create your views here.
 class IndexView(generic.ListView):
