@@ -11,7 +11,7 @@ feedback.
 
 # Documentaion
 
-Full documentation can be found in the Wiki section of this repository.
+Full documentation can be found in the [Wiki](https://github.com/yuting-zhang/event-recommender/wiki) section of this repository.
 
 # Video Presentation
 
