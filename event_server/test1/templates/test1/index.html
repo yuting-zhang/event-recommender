@@ -12,11 +12,9 @@
 
 <h1>Test page 1</h1>
 
-{% if test_context %}
+{% if testing %}
 <ul>
-	{% for testclass in test_context %}
-		<li><a href="test1/{{testclass.test_int}}/"> {{ testclass }} </a></li>
-	{% endfor %}
+    <li><a href="test1/{{testing.test_int}}/"> {{ testing }} </a></li>
 </ul>
 {% else %}
 <p> No test classes available </p>
