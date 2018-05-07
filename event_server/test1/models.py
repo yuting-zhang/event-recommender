@@ -4,6 +4,7 @@ from datetime import datetime
 
 # Create your models here.
 class TestClass(models.Model):
+    managed = False
     test_int = models.IntegerField()
     test_double = models.DecimalField(max_digits=12, decimal_places=8)
     test_string = models.CharField(max_length=100) # use TextField if large string
@@ -19,3 +20,15 @@ class TestClass(models.Model):
 
     def __str__(self):
         return str(self.test_int) + ' ' + str(self.test_double) + ' ' + self.test_string + ' ' + str(self.test_bool) + ' ' + str(self.test_date)
+
+class Users(models.Model):
+    manage = False
+    
+    class User(models.Model):
+        manage = False
+        username = models.CharField(max_length=20)
+        password = models.CharField(max_length=20)
+
+        def create(self, username, password):
+            self.username = username
+            self.password = password
