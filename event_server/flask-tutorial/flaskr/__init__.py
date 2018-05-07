@@ -2,7 +2,15 @@ import os
 
 from flask import Flask, redirect
 
+'''
+Run on mac with these commands in the terminal:
+export FLASK_APP=flaskr
+export FLASK_ENV=development
+flask run
 
+Update database with this command in the terminal:
+flask init-db
+'''
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
@@ -35,8 +43,8 @@ def create_app(test_config=None):
     from . import auth
     app.register_blueprint(auth.bp)
 
-    from . import blog
-    app.register_blueprint(blog.bp)
+    from . import model
+    app.register_blueprint(model.bp)
     app.add_url_rule('/', endpoint='index')
 
     return app

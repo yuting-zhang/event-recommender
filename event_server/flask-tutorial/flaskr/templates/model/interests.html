@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Edit Interests{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<form action="options" method="post" name="cbs">
+  {% for c in checkboxes %}
+  <input type="checkbox" value="{{checkboxes}}" name="checks"> {{c}}<br>
+  {% endfor %}
+  <br>
+  <input type="submit" value="Submit">
+</form>
+{% endblock %}

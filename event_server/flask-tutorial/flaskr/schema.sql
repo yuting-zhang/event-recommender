@@ -16,3 +16,9 @@ CREATE TABLE post (
   FOREIGN KEY (author_id) REFERENCES user (id)
 );
 
+CREATE TABLE checkboxes (
+	id INTEGER NOT NULL,
+	ai_ml INTEGER NOT NULL DEFAULT 0,
+	big_data INTEGER NOT NULL DEFAULT 0,
+	FOREIGN KEY (id) REFERENCES user (id)
+);
