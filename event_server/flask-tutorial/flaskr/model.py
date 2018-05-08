@@ -18,12 +18,12 @@ def index():
 def create():
     user_id = session.get('user_id')
     db = get_db()
-    column_names = db.execute('PRAGMA table_info(checkboxes)').fetchone()
+    column_names = ['AI/ML', 'Big Data']
     print column_names
     options = db.execute(
         'SELECT ai_ml, big_data FROM checkboxes c JOIN user u ON c.id = u.id WHERE u.id='+str(user_id)
-    ).fetchone()
-    if len(options) == 0:
+    ).fetchone() 
+    if options is None:
         print "Need to create new"
         db.execute(
             'INSERT INTO checkboxes (id, ai_ml, big_data) VALUES (?, ?, ?)',
@@ -32,9 +32,11 @@ def create():
         db.commit()
         options = db.execute(
             'SELECT ai_ml, big_data FROM checkboxes c JOIN user u ON c.id = u.id WHERE u.id='+str(user_id)
-        ).fetchall()
+        ).fetchone()
     print options
-    return render_template('model/interests.html', checkboxes=list(options))
+    values = zip(column_names, list(options))
+    print values
+    return render_template('model/interests.html', checkboxes=values)
 
 @bp.route("/options", methods=['POST'])
 def getinfo():

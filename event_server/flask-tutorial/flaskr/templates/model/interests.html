@@ -5,9 +5,9 @@
 {% endblock %}
 
 {% block content %}
-<form action="options" method="post" name="cbs">
+<form action="options" method="post" name="cbs" style="display:block">
   {% for c in checkboxes %}
-  <input type="checkbox" value="{{checkboxes}}" name="checks"> {{c}}<br>
+  <input type="checkbox" value="{{ c[0] }}" name="checks" {% if c[1] == 1 %} checked {% endif %}> {{ c[0] }}<br>
   {% endfor %}
   <br>
   <input type="submit" value="Submit">
