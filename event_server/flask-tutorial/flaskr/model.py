@@ -12,8 +12,12 @@ column_names = ['AI/ML', 'Big Data']
 @bp.route('/')
 def index():
     user_id = session.get('user_id')
-    db = get_db()
     events = {}
+    if user_id is not None:
+        db = get_db()
+        events = db.execute(
+            'SELECT ai_ml, big_data FROM checkboxes c, user u WHERE c.id = u.id AND u.id='+str(user_id)
+        ).fetchone() 
     return render_template('model/index.html', events=events)
 
 @bp.route('/create', methods=('GET', 'POST'))
