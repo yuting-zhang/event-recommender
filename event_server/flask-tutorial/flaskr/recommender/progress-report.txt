@@ -1,0 +1,9 @@
+Progress Report:
+1. What has been done:
+We have prepared some training datasets, including ~1000 CS events and ~1000 LAS events (We would like to extend the project slightly to include events in more departments). Each event crawled contains date, time, title, location, and detailed description of the event.
+We also created a dictionary from the words in dataset plus a default dictionary Mac OS provides. We used metapy to removed the stopwords and stemmed the words. We also count the appearance of each word in the dataset to serve as IDF weighting in BM25. Currently,
+we implemented BM25 as the scoring function.
+2. What remains to be done:
+Current model seem to be relatively easy, need more work to improve that to have better performance (Rocchio feedback method).
+3. Barriers:
+We may not have enough time to set up server and develop frontend user interface. Current plan is to have our system able to read a file which simulates user interactions.
