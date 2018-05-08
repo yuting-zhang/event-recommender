@@ -8,7 +8,9 @@ from flaskr.db import get_db
 from flaskr.recommender import recommender
 
 bp = Blueprint('model', __name__)
-column_names = ['AI/ML', 'Big Data']
+column_names = ['Artifical Intelligence', 'Machine Learning', 'Big Data']
+stemmed_names = ['artifici', 'learn' 'data']
+db_names = ['ai', 'ml', 'big_data']
 
 @bp.route('/')
 def index():
@@ -17,16 +19,16 @@ def index():
     if user_id is not None:
         db = get_db()
         choices = db.execute(
-            'SELECT ai_ml, big_data FROM checkboxes c, user u WHERE c.id = u.id AND u.id='+str(user_id)
+            'SELECT ai, ml, big_data FROM checkboxes c, user u WHERE c.id = u.id AND u.id='+str(user_id)
         ).fetchone() 
         if choices is not None:
         	print("updating for", user_id)
         	for i in range(len(column_names)):
         		if choices[i] == 1:
-        			g.recommender.user_data[str(user_id)][column_names[i]] = 10.0
+        			session['recommender'].user_data[str(user_id)][column_names[i]] = 10.0
         		else:
-        			g.recommender.user_data[str(user_id)][column_names[i]] = 0.0
-        	events = g.recommender.get_events(str(user_id))
+        			session['recommender'].user_data[str(user_id)][column_names[i]] = 0.0
+        	events = session['recommender'].get_events(str(user_id))
 
     return render_template('model/index.html', events=events)
 
@@ -36,16 +38,16 @@ def create():
     user_id = session.get('user_id')
     db = get_db()
     options = db.execute(
-        'SELECT ai_ml, big_data FROM checkboxes c, user u WHERE c.id = u.id AND u.id='+str(user_id)
+        'SELECT ai, ml, big_data FROM checkboxes c, user u WHERE c.id = u.id AND u.id='+str(user_id)
     ).fetchone() 
     if options is None:
         db.execute(
-            'INSERT INTO checkboxes (id, ai_ml, big_data) VALUES (?, ?, ?)',
-            (user_id, 0, 0)
+            'INSERT INTO checkboxes (id, ai, ml, big_data) VALUES (?, ?, ?, ?)',
+            (user_id, 0, 0, 0)
         )
         db.commit()
         options = db.execute(
-            'SELECT ai_ml, big_data FROM checkboxes c JOIN user u ON c.id = u.id WHERE u.id='+str(user_id)
+            'SELECT ai, ml, big_data FROM checkboxes c, user u WHERE c.id = u.id AND u.id='+str(user_id)
         ).fetchone()
     values = zip(column_names, list(options))
     return render_template('model/interests.html', checkboxes=values)
@@ -58,7 +60,7 @@ def getinfo():
         arr = [0 for i in range(len(column_names))]
         for yes in test:
             arr[column_names.index(yes)] = 1
-        insert_string = 'INSERT INTO checkboxes (id, ai_ml, big_data) VALUES ('+str(user_id)
+        insert_string = 'INSERT INTO checkboxes (id, ai, ml, big_data) VALUES ('+str(user_id)
         for val in arr:
             insert_string += ', '+str(val)
         insert_string += ')'

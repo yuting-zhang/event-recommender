@@ -40,13 +40,11 @@ def register():
             	'SELECT * FROM user WHERE username = ?', (username,)
         	).fetchone() # why do we have to do this? idk...
             session.clear()
-            # session['user_id'] = username
             session['user_id'] = user['id']
             g.user = user
-            if 'recommender' not in g:
-            	g.recommender = recommender.Recommender()
             print("added user", user['id'])
-            g.recommender.add_new_user(str(session.get('user_id')))
+            session['recommender'] = recommender.Recommender()
+            session['recommender'].add_new_user(str(session.get('user_id')))
             return redirect(url_for('model.create'))
 
         flash(error)
@@ -81,8 +79,6 @@ def login():
 @bp.before_app_request
 def load_logged_in_user():
     user_id = session.get('user_id')
-    if 'recommender' not in g:
-    	g.recommender = recommender.Recommender()
     if user_id is None:
         g.user = None
     else:

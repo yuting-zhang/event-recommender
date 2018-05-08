@@ -8,10 +8,10 @@ from flask import Flask, redirect, g
 Run on mac with these commands in the terminal:
 export FLASK_APP=flaskr
 export FLASK_ENV=development
-flask run
+python3 -m flask run
 
 Update database with this command in the terminal:
-flask init-db
+python3 -m flask init-db
 '''
 def create_app(test_config=None):
     # create and configure the app
