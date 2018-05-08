@@ -35,12 +35,10 @@ def index():
 def create():
     user_id = session.get('user_id')
     db = get_db()
-    print column_names # debug
     options = db.execute(
         'SELECT ai_ml, big_data FROM checkboxes c, user u WHERE c.id = u.id AND u.id='+str(user_id)
     ).fetchone() 
     if options is None:
-        print "Need to create new" # debug
         db.execute(
             'INSERT INTO checkboxes (id, ai_ml, big_data) VALUES (?, ?, ?)',
             (user_id, 0, 0)
@@ -49,16 +47,13 @@ def create():
         options = db.execute(
             'SELECT ai_ml, big_data FROM checkboxes c JOIN user u ON c.id = u.id WHERE u.id='+str(user_id)
         ).fetchone()
-    print options # debug
     values = zip(column_names, list(options))
-    print values # debug
     return render_template('model/interests.html', checkboxes=values)
 
 @bp.route("/options", methods=['POST'])
 def getinfo():
     if request.method == 'POST':
         test = request.form.getlist('checks')
-        print test # debug
         user_id = session.get('user_id')
         arr = [0 for i in range(len(column_names))]
         for yes in test:
@@ -67,7 +62,6 @@ def getinfo():
         for val in arr:
             insert_string += ', '+str(val)
         insert_string += ')'
-        print insert_string # debug
         db = get_db()
         if db.execute('SELECT * FROM checkboxes WHERE id='+str(user_id)) is not None:
             db.execute('DELETE FROM checkboxes WHERE id='+str(user_id))

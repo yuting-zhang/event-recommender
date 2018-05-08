@@ -45,7 +45,7 @@ def register():
             g.user = user
             if 'recommender' not in g:
             	g.recommender = recommender.Recommender()
-            print "added user", user['id']
+            print("added user", user['id'])
             g.recommender.add_new_user(str(session.get('user_id')))
             return redirect(url_for('model.create'))
 
