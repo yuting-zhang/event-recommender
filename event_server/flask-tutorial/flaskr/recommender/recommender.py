@@ -1,5 +1,5 @@
 import csv
-from bm25 import BM25
+from flaskr.recommender.bm25 import BM25
 from operator import itemgetter
 
 UNK = "__UNKNOWN_WORD_TOKEN__"
