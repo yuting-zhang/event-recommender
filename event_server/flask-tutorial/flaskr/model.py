@@ -5,6 +5,7 @@ from werkzeug.exceptions import abort
 
 from flaskr.auth import login_required
 from flaskr.db import get_db
+from flaskr.recommender import recommender
 
 bp = Blueprint('model', __name__)
 column_names = ['AI/ML', 'Big Data']
@@ -15,9 +16,18 @@ def index():
     events = {}
     if user_id is not None:
         db = get_db()
-        events = db.execute(
+        choices = db.execute(
             'SELECT ai_ml, big_data FROM checkboxes c, user u WHERE c.id = u.id AND u.id='+str(user_id)
         ).fetchone() 
+        if choices is not None:
+        	print "updating for ", user_id
+        	for i in range(len(column_names)):
+        		if choices[i] == 1:
+        			g.recommender.user_data[str(user_id)][column_names[i]] = 10.0
+        		else:
+        			g.recommender.user_data[str(user_id)][column_names[i]] = 0.0
+        	events = g.recommender.get_events(str(user_id))
+
     return render_template('model/index.html', events=events)
 
 @bp.route('/create', methods=('GET', 'POST'))

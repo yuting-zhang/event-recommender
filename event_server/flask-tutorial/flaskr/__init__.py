@@ -1,6 +1,8 @@
 import os
+import sys
+sys.path.insert(0, '/recommender')
 
-from flask import Flask, redirect
+from flask import Flask, redirect, g
 
 '''
 Run on mac with these commands in the terminal:

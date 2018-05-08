@@ -7,7 +7,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from flaskr.db import get_db
 
-from flaskr.recommender import Recommender
+from flaskr.recommender import recommender
 
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -43,6 +43,10 @@ def register():
             # session['user_id'] = username
             session['user_id'] = user['id']
             g.user = user
+            if 'recommender' not in g:
+            	g.recommender = recommender.Recommender()
+            print "added user", user['id']
+            g.recommender.add_new_user(str(user['id']))
             return redirect(url_for('model.create'))
 
         flash(error)
@@ -77,7 +81,8 @@ def login():
 @bp.before_app_request
 def load_logged_in_user():
     user_id = session.get('user_id')
-
+    if 'recommender' not in g:
+    	g.recommender = recommender.Recommender()
     if user_id is None:
         g.user = None
     else:

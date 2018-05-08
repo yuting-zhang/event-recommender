@@ -4,6 +4,8 @@ from operator import itemgetter
 
 UNK = "__UNKNOWN_WORD_TOKEN__"
 
+pathname = "flaskr/recommender/"
+
 class Recommender:
 
     def __init__(self, train_ratio = 0.8):
@@ -14,15 +16,15 @@ class Recommender:
 
     def init_docs_data(self, train_ratio):
         # load data
-        cs_docs = self.load_docs_data("cs-train.csv")
-        cs_docs_stemmed = self.load_docs_data("stemmed-cs-train.csv")
+        cs_docs = self.load_docs_data(pathname+"cs-train.csv")
+        cs_docs_stemmed = self.load_docs_data(pathname+"stemmed-cs-train.csv")
 
         if len(cs_docs) != len(cs_docs_stemmed):
             raise Exception("cs-train.csv and stemmed-cs-train.csv have " +
                             "different length")
 
-        las_docs = self.load_docs_data("las-train.csv")
-        las_docs_stemmed = self.load_docs_data("stemmed-las-train.csv")
+        las_docs = self.load_docs_data(pathname+"las-train.csv")
+        las_docs_stemmed = self.load_docs_data(pathname+"stemmed-las-train.csv")
 
         if len(las_docs) != len(las_docs_stemmed):
             raise Exception("las-train.csv and stemmed-las-train.csv have " +
@@ -50,7 +52,7 @@ class Recommender:
     def init_dict_data(self):
         # words not in dictionary will be treated as unknown
         self.dictionary = set()
-        with open("stemmed_dictionary.txt", "r") as dict_file:
+        with open(pathname+"stemmed_dictionary.txt", "r") as dict_file:
             for word in dict_file:
                 self.dictionary.add(word.strip())
 
@@ -61,8 +63,8 @@ class Recommender:
     def init_user_data(self):
         self.user_data = {}
         try:
-            with open("user-data.csv", "r") as data_csv,\
-                 open("user-list.csv", "r") as user_csv:
+            with open(pathname+"user-data.csv", "r") as data_csv,\
+                 open(pathname+"user-list.csv", "r") as user_csv:
                 data_reader = csv.DictReader(data_csv)
                 for username, data in zip(user_csv, data_reader):
                     for key in data:
@@ -90,8 +92,8 @@ class Recommender:
     '''
     def save_user_data(self):
         fieldnames = [UNK] + list(self.dictionary)
-        with open("user-data.csv", "w") as data_csv,\
-             open("user-list.csv", "w") as user_csv:
+        with open(pathname+"user-data.csv", "w") as data_csv,\
+             open(pathname+"user-list.csv", "w") as user_csv:
             data_writer = csv.DictWriter(data_csv, fieldnames=fieldnames)
             data_writer.writeheader()
 
