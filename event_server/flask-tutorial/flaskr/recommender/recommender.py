@@ -6,7 +6,7 @@ UNK = "__UNKNOWN_WORD_TOKEN__"
 
 pathname = "flaskr/recommender/"
 
-num_results = 20
+num_results = 10
 
 class Recommender:
 
