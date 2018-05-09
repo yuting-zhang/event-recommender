@@ -5,7 +5,7 @@ from flask import (
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from flaskr.db import get_db
+from flaskr.db import get_db, get_rec
 
 from flaskr.recommender import recommender
 
@@ -18,6 +18,7 @@ def register():
         username = request.form['username']
         password = request.form['password']
         db = get_db()
+        rec = get_rec()
         error = None
 
         if not username:
@@ -43,8 +44,7 @@ def register():
             session['user_id'] = user['id']
             g.user = user
             print("added user", user['id'])
-            session['recommender'] = recommender.Recommender()
-            session['recommender'].add_new_user(str(session.get('user_id')))
+            rec.add_new_user(str(session.get('user_id')))
             return redirect(url_for('model.create'))
 
         flash(error)

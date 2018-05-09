@@ -4,7 +4,7 @@ from flask import (
 from werkzeug.exceptions import abort
 
 from flaskr.auth import login_required
-from flaskr.db import get_db
+from flaskr.db import get_db, get_rec
 from flaskr.recommender import recommender
 
 bp = Blueprint('model', __name__)
@@ -18,6 +18,7 @@ def index():
     events = {}
     if user_id is not None:
         db = get_db()
+        rec = get_rec()
         choices = db.execute(
             'SELECT ai, ml, big_data FROM checkboxes c, user u WHERE c.id = u.id AND u.id='+str(user_id)
         ).fetchone() 
@@ -25,10 +26,10 @@ def index():
         	print("updating for", user_id)
         	for i in range(len(column_names)):
         		if choices[i] == 1:
-        			session['recommender'].user_data[str(user_id)][column_names[i]] = 10.0
+        			rec.user_data[str(user_id)][column_names[i]] = 10.0
         		else:
-        			session['recommender'].user_data[str(user_id)][column_names[i]] = 0.0
-        	events = session['recommender'].get_events(str(user_id))
+        			 rec.user_data[str(user_id)][column_names[i]] = 0.0
+        	events = rec.get_events(str(user_id))
 
     return render_template('model/index.html', events=events)
 

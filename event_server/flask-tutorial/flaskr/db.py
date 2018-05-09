@@ -3,7 +3,14 @@ import sqlite3
 import click
 from flask import current_app, g
 from flask.cli import with_appcontext
+from .recommender import recommender
 
+rec = recommender.Recommender()
+
+# Debugging infos
+class hello():
+    count = 0
+hi = hello()
 
 def get_db():
     if 'db' not in g:
@@ -15,6 +22,11 @@ def get_db():
 
     return g.db
 
+def get_rec():
+    hi.count+=1
+    print(hi.count)
+
+    return rec
 
 def close_db(e=None):
     db = g.pop('db', None)
@@ -34,6 +46,7 @@ def init_db():
 def init_db_command():
     """Clear the existing data and create new tables."""
     init_db()
+    print("Database initalized")
     click.echo('Initialized the database.')
 
 def init_app(app):
