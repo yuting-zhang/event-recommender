@@ -9,7 +9,7 @@ from flaskr.recommender import recommender
 
 bp = Blueprint('model', __name__)
 column_names = ['Artifical Intelligence', 'Machine Learning', 'Big Data']
-stemmed_names = ['artifici', 'learn' 'data']
+stemmed_names = ['music', 'ICPC' 'secur']
 db_names = ['ai', 'ml', 'big_data']
 
 @bp.route('/')
@@ -23,13 +23,14 @@ def index():
             'SELECT ai, ml, big_data FROM checkboxes c, user u WHERE c.id = u.id AND u.id='+str(user_id)
         ).fetchone() 
         if choices is not None:
-        	print("updating for", user_id)
-        	for i in range(len(column_names)):
-        		if choices[i] == 1:
-        			rec.user_data[str(user_id)][column_names[i]] = 10.0
-        		else:
-        			 rec.user_data[str(user_id)][column_names[i]] = 0.0
-        	events = rec.get_events(str(user_id))
+            print("updating for", user_id)
+            for i in range(len(column_names)):
+                if choices[i] == 1:
+                    rec.user_data[str(user_id)][column_names[i]] = 10.0
+                else:
+                    rec.user_data[str(user_id)][column_names[i]] = 0.0
+            events = rec.get_events(str(user_id))
+            rec.save_user_data()
 
     return render_template('model/index.html', events=events)
 
