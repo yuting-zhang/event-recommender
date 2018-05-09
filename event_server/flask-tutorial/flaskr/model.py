@@ -8,9 +8,10 @@ from flaskr.db import get_db, get_rec
 from flaskr.recommender import recommender
 
 bp = Blueprint('model', __name__)
-column_names = ['Artifical Intelligence', 'Machine Learning', 'Big Data']
-stemmed_names = ['artific', 'learn', 'data']
-db_names = ['ai', 'ml', 'big_data']
+column_names = ['Artifical Intelligence', 'Machine Learning', 'Big Data', 'Algorithms', 'Augmented/Virtual Reality', 'Cloud Computing', 'Graphics', 'Medicine', 'Biology', 'Chemistry', 'Linguistics', 'Statistics', 'Mathematics', 'Economics']
+stemmed_names = ['artific', 'learn', 'data', 'algorithm', 'realiti', 'cloud', 'graphic', 'medicin', 'biolog', 'chemistri', 'linguist', 'statist', 'math', 'economi']
+db_names = ['ai', 'ml', 'big_data', 'algos', 'ar_vr', 'cloud', 'graphics', 'meds', 'bio', 'chem', 'linguistics', 'stats', 'math', 'econ']
+joined_db_names = ', '.join(map(str, db_names))
 
 @bp.route('/')
 def index():
@@ -19,9 +20,9 @@ def index():
     if user_id is not None:
         db = get_db()
         rec = get_rec()
-        choices = db.execute(
-            'SELECT ai, ml, big_data FROM checkboxes c, user u WHERE c.id = u.id AND u.id='+str(user_id)
-        ).fetchone() 
+        query_string = 'SELECT '+joined_db_names+' FROM checkboxes c, user u WHERE c.id = u.id AND u.id='+str(user_id)
+        print(query_string)
+        choices = db.execute(query_string).fetchone() 
         if choices is not None:
             print("updating for", user_id)
             for i in range(len(column_names)):
@@ -39,18 +40,15 @@ def index():
 def create():
     user_id = session.get('user_id')
     db = get_db()
-    options = db.execute(
-        'SELECT ai, ml, big_data FROM checkboxes c, user u WHERE c.id = u.id AND u.id='+str(user_id)
-    ).fetchone() 
+    query_string = 'SELECT '+joined_db_names+' FROM checkboxes c, user u WHERE c.id = u.id AND u.id='+str(user_id)
+    options = db.execute(query_string).fetchone() 
     if options is None:
-        db.execute(
-            'INSERT INTO checkboxes (id, ai, ml, big_data) VALUES (?, ?, ?, ?)',
-            (user_id, 0, 0, 0)
-        )
+        zero_string = ', '.join(['0' for i in range(len(db_names))])
+        insert_string = 'INSERT INTO checkboxes (id, '+joined_db_names+') VALUES ('+str(user_id)+', '+zero_string+')'
+        print(insert_string)
+        db.execute(insert_string)
         db.commit()
-        options = db.execute(
-            'SELECT ai, ml, big_data FROM checkboxes c, user u WHERE c.id = u.id AND u.id='+str(user_id)
-        ).fetchone()
+        options = db.execute(query_string).fetchone() 
     values = zip(column_names, list(options))
     return render_template('model/interests.html', checkboxes=values)
 
@@ -62,7 +60,7 @@ def getinfo():
         arr = [0 for i in range(len(column_names))]
         for yes in test:
             arr[column_names.index(yes)] = 1
-        insert_string = 'INSERT INTO checkboxes (id, ai, ml, big_data) VALUES ('+str(user_id)
+        insert_string = 'INSERT INTO checkboxes (id, '+joined_db_names+') VALUES ('+str(user_id)
         for val in arr:
             insert_string += ', '+str(val)
         insert_string += ')'

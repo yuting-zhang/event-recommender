@@ -6,6 +6,8 @@ UNK = "__UNKNOWN_WORD_TOKEN__"
 
 pathname = "flaskr/recommender/"
 
+num_results = 20
+
 class Recommender:
 
     def __init__(self, train_ratio = 0.8):
@@ -127,12 +129,14 @@ class Recommender:
             scores.append([idx, score])
 
         scores = sorted(scores, key=itemgetter(1), reverse=True)
-        print(scores[:5])
+        print(scores[:num_results])
 
-        indices = [cell[0] for cell in scores[:5]]
+        indices = [cell[0] for cell in scores[:num_results]]
         events = [(index, self.test_docs[index]) for index in indices]
+        """
         for event in events:
             print(event)
+            """
         return events
 
 
