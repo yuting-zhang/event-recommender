@@ -11,7 +11,8 @@ bp = Blueprint('model', __name__)
 column_names = ['Artifical Intelligence', 'Machine Learning', 'Big Data', 'Algorithms', \
         'Augmented/Virtual Reality', 'Graphics', 'Biology', 'Linguistics', 'Statistics', 'Mathematics', 'Economics']
 stemmed_names = [['artifici','intellig'], ['machin'], ['big','data','scale'], ['algorithm'], \
-        ['virtual','realiti'], ['graphic','numeric','Image'], ['biolog','biologist','biologes'], ['linguist'], ['statist'], ['math'], ['economi']]
+        ['virtual','realiti'], ['graphic','numeric','imag'], ['biolog','biologist','biologes'], \
+        ['linguist','linguistician','languag'], ['statist'], ['math','mathemat','mathematic'], ['economi','economist']]
 db_names = ['ai', 'ml', 'big_data', 'algos', 'ar_vr', 'graphics', 'bio', 'linguistics', 'stats', 'math', 'econ']
 joined_db_names = ', '.join(db_names)
 
@@ -35,6 +36,9 @@ def index():
                     else:
                         print("no for", idx)
             print("updating for", user_id)
+            # hack to fix key errors
+            if rec.get_events(str(user_id)) is None:
+                rec.add_new_user(str(user_id))
             # set user interests
             for i in range(len(column_names)):
                 if choices[i] == 1:
