@@ -24,7 +24,7 @@ def get_db():
 
 def get_rec():
     hi.count+=1
-    print(hi.count)
+    print('count:', hi.count)
 
     return rec
 

@@ -9,12 +9,10 @@ from flaskr.recommender import recommender
 
 bp = Blueprint('model', __name__)
 column_names = ['Artifical Intelligence', 'Machine Learning', 'Big Data', 'Algorithms', \
-        'Augmented/Virtual Reality', 'Cloud Computing', 'Graphics', 'Medicine', 'Biology', \
-        'Chemistry', 'Linguistics', 'Statistics', 'Mathematics', 'Economics']
-stemmed_names = ['artific', 'learn', 'data', 'algorithm', 'realiti', 'cloud', 'graphic', \
-        'medicin', 'biolog', 'chemistri', 'linguist', 'statist', 'math', 'economi']
-db_names = ['ai', 'ml', 'big_data', 'algos', 'ar_vr', 'cloud', 'graphics', 'meds', \
-        'bio', 'chem', 'linguistics', 'stats', 'math', 'econ']
+        'Augmented/Virtual Reality', 'Graphics', 'Biology', 'Linguistics', 'Statistics', 'Mathematics', 'Economics']
+stemmed_names = [['artifici','intellig'], ['machin'], ['big','data','scale'], ['algorithm'], \
+        ['virtual','realiti'], ['graphic','numeric','Image'], ['biolog','biologist','biologes'], ['linguist'], ['statist'], ['math'], ['economi']]
+db_names = ['ai', 'ml', 'big_data', 'algos', 'ar_vr', 'graphics', 'bio', 'linguistics', 'stats', 'math', 'econ']
 joined_db_names = ', '.join(db_names)
 
 @bp.route('/', methods=('GET', 'POST'))
@@ -40,9 +38,11 @@ def index():
             # set user interests
             for i in range(len(column_names)):
                 if choices[i] == 1:
-                    rec.user_data[str(user_id)][stemmed_names[i]] = 10.0
+                    for stemmed_words in stemmed_names[i]:
+                        rec.user_data[str(user_id)][stemmed_words] = 10.0
                 else:
-                    rec.user_data[str(user_id)][stemmed_names[i]] = 0.0
+                    for stemmed_words in stemmed_names[i]:
+                        rec.user_data[str(user_id)][stemmed_words] = 0.0
             # get events
             events = rec.get_events(str(user_id))
             rec.save_user_data()
@@ -79,7 +79,7 @@ def getinfo():
         for val in arr:
             insert_string += ', '+str(val)
         insert_string += ')'
-        
+
         db = get_db()
         if db.execute('SELECT * FROM checkboxes WHERE id='+str(user_id)) is not None:
             db.execute('DELETE FROM checkboxes WHERE id='+str(user_id))
