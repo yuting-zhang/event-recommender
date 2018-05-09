@@ -26,9 +26,9 @@ def index():
             print("updating for", user_id)
             for i in range(len(column_names)):
                 if choices[i] == 1:
-                    rec.user_data[str(user_id)][column_names[i]] = 10.0
+                    rec.user_data[str(user_id)][stemmed_names[i]] = 10.0
                 else:
-                    rec.user_data[str(user_id)][column_names[i]] = 0.0
+                    rec.user_data[str(user_id)][stemmed_names[i]] = 0.0
             events = rec.get_events(str(user_id))
             rec.save_user_data()
 
