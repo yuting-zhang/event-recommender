@@ -8,10 +8,14 @@ from flaskr.db import get_db, get_rec
 from flaskr.recommender import recommender
 
 bp = Blueprint('model', __name__)
-column_names = ['Artifical Intelligence', 'Machine Learning', 'Big Data', 'Algorithms', 'Augmented/Virtual Reality', 'Cloud Computing', 'Graphics', 'Medicine', 'Biology', 'Chemistry', 'Linguistics', 'Statistics', 'Mathematics', 'Economics']
-stemmed_names = ['artific', 'learn', 'data', 'algorithm', 'realiti', 'cloud', 'graphic', 'medicin', 'biolog', 'chemistri', 'linguist', 'statist', 'math', 'economi']
-db_names = ['ai', 'ml', 'big_data', 'algos', 'ar_vr', 'cloud', 'graphics', 'meds', 'bio', 'chem', 'linguistics', 'stats', 'math', 'econ']
-joined_db_names = ', '.join(map(str, db_names))
+column_names = ['Artifical Intelligence', 'Machine Learning', 'Big Data', 'Algorithms', \
+        'Augmented/Virtual Reality', 'Cloud Computing', 'Graphics', 'Medicine', 'Biology', \
+        'Chemistry', 'Linguistics', 'Statistics', 'Mathematics', 'Economics']
+stemmed_names = ['artific', 'learn', 'data', 'algorithm', 'realiti', 'cloud', 'graphic', \
+        'medicin', 'biolog', 'chemistri', 'linguist', 'statist', 'math', 'economi']
+db_names = ['ai', 'ml', 'big_data', 'algos', 'ar_vr', 'cloud', 'graphics', 'meds', \
+        'bio', 'chem', 'linguistics', 'stats', 'math', 'econ']
+joined_db_names = ', '.join(db_names)
 
 @bp.route('/')
 def index():
