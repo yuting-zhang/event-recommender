@@ -130,7 +130,7 @@ class Recommender:
         print(scores[:5])
 
         indices = [cell[0] for cell in scores[:5]]
-        events = [self.test_docs[index] for index in indices]
+        events = [(index, self.test_docs[index]) for index in indices]
         for event in events:
             print(event)
         return events
