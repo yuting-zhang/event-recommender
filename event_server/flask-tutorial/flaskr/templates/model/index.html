@@ -9,6 +9,8 @@
 
 {% block content %}
   {% if g.user %}
+  <form method="post" style="display:inline-block;">
+    <input type="submit" class="btn btn-primary" value="Update">
   {% for event in events %}
     <article class="post">
       <header data-toggle="collapse" data-target="#event_description_{{ event[0] }}">
@@ -19,13 +21,14 @@
       </header>
       <div id="event_description_{{ event[0] }}" class="collapse">
       <p class="body">{{ event[1][4] }}</p>
-      <form style="display:inline-block;"><input type="button" class="btn btn-success" value="Interested"></form>
-      <form style="display:inline-block;"><input type="button" class="btn btn-danger" value="Not interested"></form>
+      <input type="radio" name="feedback_{{ event[0] }}" value="y{{ event[0] }}"> Interested<br>
+      <input type="radio" name="feedback_{{ event[0] }}" value="n{{ event[0] }}"> Not interested<br>
       </div>
     </article>
     {% if not loop.last %}
       <hr>
     {% endif %}
   {% endfor %}
+  </form>
   {% endif %}
 {% endblock %}

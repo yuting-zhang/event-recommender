@@ -17,7 +17,7 @@ db_names = ['ai', 'ml', 'big_data', 'algos', 'ar_vr', 'cloud', 'graphics', 'meds
         'bio', 'chem', 'linguistics', 'stats', 'math', 'econ']
 joined_db_names = ', '.join(db_names)
 
-@bp.route('/')
+@bp.route('/', methods=('GET', 'POST'))
 def index():
     user_id = session.get('user_id')
     events = {}
@@ -28,12 +28,22 @@ def index():
         print(query_string)
         choices = db.execute(query_string).fetchone() 
         if choices is not None:
+            # get user feedback and update accordingly
+            for radio_option in request.form:
+                if len(radio_option) > 9 and radio_option[:9] == 'feedback_':
+                    idx = int(radio_option[9:])
+                    if request.form[radio_option][0] == 'y':
+                        print("yes for", idx)
+                    else:
+                        print("no for", idx)
             print("updating for", user_id)
+            # set user interests
             for i in range(len(column_names)):
                 if choices[i] == 1:
                     rec.user_data[str(user_id)][stemmed_names[i]] = 10.0
                 else:
                     rec.user_data[str(user_id)][stemmed_names[i]] = 0.0
+            # get events
             events = rec.get_events(str(user_id))
             rec.save_user_data()
 
@@ -53,6 +63,7 @@ def create():
         db.execute(insert_string)
         db.commit()
         options = db.execute(query_string).fetchone() 
+
     values = zip(column_names, list(options))
     return render_template('model/interests.html', checkboxes=values)
 
@@ -68,6 +79,7 @@ def getinfo():
         for val in arr:
             insert_string += ', '+str(val)
         insert_string += ')'
+        
         db = get_db()
         if db.execute('SELECT * FROM checkboxes WHERE id='+str(user_id)) is not None:
             db.execute('DELETE FROM checkboxes WHERE id='+str(user_id))
