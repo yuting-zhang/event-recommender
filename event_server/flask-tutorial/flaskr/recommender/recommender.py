@@ -118,6 +118,7 @@ class Recommender:
             doc_dict = {}
             for field in doc:
                 for word in field.split():
+                    word = word.lower()
                     if not word in self.dictionary:
                         word = UNK
                     if word in doc_dict:
