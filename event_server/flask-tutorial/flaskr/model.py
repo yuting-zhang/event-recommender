@@ -9,7 +9,7 @@ from flaskr.recommender import recommender
 
 bp = Blueprint('model', __name__)
 column_names = ['Artifical Intelligence', 'Machine Learning', 'Big Data']
-stemmed_names = ['artifi', 'learn', 'data']
+stemmed_names = ['artific', 'learn', 'data']
 db_names = ['ai', 'ml', 'big_data']
 
 @bp.route('/')
