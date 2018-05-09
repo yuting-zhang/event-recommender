@@ -18,9 +18,11 @@ for fdata in data_file:
         for row in reader:
             dictionary |= set(row)
 
+dictionary = map(lambda x: x.lower(), dictionary)
 dictionary = utility.remove_stopwords(dictionary)
 dictionary = utility.stem(dictionary)
 dictionary = set(dictionary)
 
-for word in dictionary:
+sorted_dictionary = sorted(dictionary)
+for word in sorted_dictionary:
     fo.write("%s\n" % word)
