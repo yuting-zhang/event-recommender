@@ -7,6 +7,9 @@ from flaskr.auth import login_required
 from flaskr.db import get_db, get_rec
 from flaskr.recommender import recommender
 
+'''
+List of all interests and the corresponding names in db and dict
+'''
 bp = Blueprint('model', __name__)
 column_names = ['Artifical Intelligence', 'Machine Learning', 'Big Data', 'Algorithms', \
         'Augmented/Virtual Reality', 'Graphics', 'Biology', 'Linguistics', 'Statistics', 'Mathematics', 'Economics']
@@ -16,6 +19,9 @@ stemmed_names = [['artifici','intellig'], ['machin'], ['big','data','scale'], ['
 db_names = ['ai', 'ml', 'big_data', 'algos', 'ar_vr', 'graphics', 'bio', 'linguistics', 'stats', 'math', 'econ']
 joined_db_names = ', '.join(db_names)
 
+'''
+Main page user sees
+'''
 @bp.route('/', methods=('GET', 'POST'))
 def index():
     user_id = session.get('user_id')
@@ -56,6 +62,9 @@ def index():
 
     return render_template('model/index.html', events=events)
 
+'''
+Page to handle interests
+'''
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
 def create():
@@ -74,6 +83,9 @@ def create():
     values = zip(column_names, list(options))
     return render_template('model/interests.html', checkboxes=values)
 
+'''
+Method to handle POST request from interests and update the events
+'''
 @bp.route("/options", methods=['POST'])
 def getinfo():
     if request.method == 'POST':
@@ -96,6 +108,3 @@ def getinfo():
     else:
         return redirect('/')
 
-def get_events(id, check_author=True):
-    events = {}
-    return events

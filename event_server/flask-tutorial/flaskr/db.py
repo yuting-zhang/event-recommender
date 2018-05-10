@@ -7,6 +7,10 @@ from .recommender import recommender
 
 rec = recommender.Recommender()
 
+'''
+Borrowed from the Flask tutorial
+'''
+
 # Debugging infos
 class hello():
     count = 0
@@ -22,6 +26,9 @@ def get_db():
 
     return g.db
 
+'''
+Get recommender object and debugging
+'''
 def get_rec():
     hi.count+=1
     print('count:', hi.count)

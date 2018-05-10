@@ -9,6 +9,9 @@ from flaskr.db import get_db, get_rec
 
 from flaskr.recommender import recommender
 
+'''
+Borrowed from the Flask tutorial
+'''
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 

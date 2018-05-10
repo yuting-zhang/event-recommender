@@ -15,6 +15,10 @@ python3 -m flask run
 Update database with this command in the terminal:
 python3 -m flask init-db
 '''
+
+'''
+init the Flask app
+'''
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
@@ -36,17 +40,22 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    """
     # redirect page to register or log in page
     @app.route('/hello')
     def route():
         return redirect('/auth/register')
+        """
 
+    # init db
     from . import db
     db.init_app(app)
 
+    # init authentication page
     from . import auth
     app.register_blueprint(auth.bp)
 
+    # init model page for events
     from . import model
     app.register_blueprint(model.bp)
     app.add_url_rule('/', endpoint='index')
