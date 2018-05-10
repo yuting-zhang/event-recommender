@@ -14,6 +14,7 @@ feedback.
 This is a flask app using python3. Make sure you have these programs installed before you run the app. 
 Note the below only works on linux and mac. First make sure you are in the correct folder. 
 You should see the flaskr and instance folders. When you are in the correct folder, run the following commands in your terminal.
+After you run these, go to http://127.0.0.1:5000/ on your browser to see the working app.
 export FLASK_APP=flaskr
 export FLASK_ENV=development
 python3 -m flask init-db
