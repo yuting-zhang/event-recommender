@@ -10,7 +10,7 @@ As a result, this event recommender system will push events based on user profil
 feedback.
 
 # Demo
-http://uiuc-event-recommender.eastus.cloudapp.azure.com/
+http://uiuc-event-recommender.eastus.cloudapp.azure.com/ (May not be up all the time)
 
 # Deployment
 
