@@ -11,6 +11,9 @@ class Recommender:
         self.init_dict_data()
         self.init_user_data()
         self.bm25 = BM25(self.train_docs_stemmed)
+        self.alpha = 1.0
+        self.beta = 0.01
+        self.gamma = 0.1
 
     def init_docs_data(self, train_ratio):
         # load data
@@ -98,6 +101,22 @@ class Recommender:
             for username in self.user_data:
                 data_writer.writerow(self.user_data[username])
                 user_csv.write(username + "\n")
+
+    '''
+    get word count of a given doc
+    '''
+    def get_word_count(self, doc):
+        # currently treat all fields as the same
+        doc_dict = {}
+        for field in doc:
+            for word in field.split():
+                if not word in self.dictionary:
+                    word = UNK
+                if word in doc_dict:
+                    doc_dict[word] += 1.0
+                else:
+                    doc_dict[word] = 1.0
+        return doc_dict
                 
     '''
     get a list of recommended events for the given user
@@ -110,16 +129,7 @@ class Recommender:
         scores = []
         for idx in range(len(self.test_docs_stemmed)):
             doc = self.test_docs_stemmed[idx]
-            # currently treat all fields as the same
-            doc_dict = {}
-            for field in doc:
-                for word in field.split():
-                    if not word in self.dictionary:
-                        word = UNK
-                    if word in doc_dict:
-                        doc_dict[word] += 1.0
-                    else:
-                        doc_dict[word] = 1.0
+            doc_dict = self.get_word_count(doc)
 
             score = self.bm25.get_score(doc_dict, self.user_data[username])
             scores.append([idx, score])
@@ -133,6 +143,24 @@ class Recommender:
             print(event)
         return events
 
+    '''
+    update user's profile vector
+    '''
+    def update_profile_vector(self, username, lst_rel, lst_non_rel):
+        for word in self.user_data[username]:
+            self.user_data[username][word] *= self.alpha
+
+        w = self.beta / len(lst_rel)
+        for idx in lst_non_rel:
+            doc_dict = self.get_word_count(self.test_docs_stemmed[idx])
+            for word in doc_dict:
+                self.user_data[username][word] -= w * doc_dict[word]
+
+        w = self.gamma / len(lst_non_rel)
+        for idx in lst_rel:
+            doc_dict = self.get_word_count(self.test_docs_stemmed[idx])
+            for word in doc_dict:
+                self.user_data[username][word] -= w * doc_dict[word]
 
 if __name__ == "__main__":
     rec = Recommender()
@@ -141,4 +169,5 @@ if __name__ == "__main__":
     rec.user_data["yuting"]["ICPC"] = 10.0
     rec.user_data["yuting"]["secur"] = 5.0
     rec.get_events("yuting")
+    rec.update_profile_vector("yuting", [1], [2])
     rec.save_user_data()
