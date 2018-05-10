@@ -28,13 +28,16 @@ def index():
         choices = db.execute(query_string).fetchone() 
         if choices is not None:
             # get user feedback and update accordingly
+            lst_rel = []
+            lst_non_rel = []
             for radio_option in request.form:
                 if len(radio_option) > 9 and radio_option[:9] == 'feedback_':
                     idx = int(radio_option[9:])
                     if request.form[radio_option][0] == 'y':
-                        print("yes for", idx)
+                        lst_rel.append(idx)
                     else:
-                        print("no for", idx)
+                        lst_non_rel.append(idx)
+            rec.update_profile_vector(str(user_id), lst_rel, lst_non_rel)
             print("updating for", user_id)
             # hack to fix key errors
             if rec.get_events(str(user_id)) is None:

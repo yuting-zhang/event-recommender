@@ -15,6 +15,9 @@ class Recommender:
         self.init_dict_data()
         self.init_user_data()
         self.bm25 = BM25(self.train_docs_stemmed)
+        self.alpha = 1.0
+        self.beta = 0.01
+        self.gamma = 0.1
 
     def init_docs_data(self, train_ratio):
         # load data
@@ -93,7 +96,7 @@ class Recommender:
     save current user data to disk
     '''
     def save_user_data(self):
-        fieldnames = list(self.dictionary)
+        fieldnames = [UNK] + list(self.dictionary)
         with open(pathname+"user-data.csv", "w") as data_csv,\
              open(pathname+"user-list.csv", "w") as user_csv:
 
@@ -190,4 +193,5 @@ if __name__ == "__main__":
     rec.user_data["yuting"]["ICPC"] = 10.0
     rec.user_data["yuting"]["secur"] = 5.0
     rec.get_events("yuting")
+    rec.update_profile_vector("yuting", [1], [2])
     rec.save_user_data()
