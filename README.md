@@ -9,16 +9,30 @@ Given there are so many events in UIUC, it is very hard for someone to track all
 As a result, this event recommender system will push events based on user profile, and update the user profile based on
 feedback.
 
+# Demo
+http://uiuc-event-recommender.eastus.cloudapp.azure.com/
+
 # Deployment
 
 This is a flask app using python3. Make sure you have these programs installed before you run the app. 
 Note the below only works on linux and mac. First make sure you are in the correct folder. 
 You should see the flaskr and instance folders. When you are in the correct folder, run the following commands in your terminal.
 After you run these, go to http://127.0.0.1:5000/ on your browser to see the working app.
-export FLASK_APP=flaskr
-export FLASK_ENV=development
-python3 -m flask init-db
-python3 -m flask run
+
+
+    export FLASK_APP=flaskr
+    export FLASK_ENV=development
+    python3 -m flask init-db
+    python3 -m flask run
+
+
+After verifying the server is running correctly. Ctrl+C to shutdown server.
+
+If you want to deploy it so that it can be accessed remotely, we have provided a simple script 
+
+    run.sh
+
+Run the script to start server at 0.0.0.0 with port 80. You will need sudo for this command.
 
 # Documentaion
 
