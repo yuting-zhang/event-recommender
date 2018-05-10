@@ -93,14 +93,22 @@ class Recommender:
     save current user data to disk
     '''
     def save_user_data(self):
-        fieldnames = [UNK] + list(self.dictionary)
+        fieldnames = list(self.dictionary)
         with open(pathname+"user-data.csv", "w") as data_csv,\
              open(pathname+"user-list.csv", "w") as user_csv:
-            data_writer = csv.DictWriter(data_csv, fieldnames=fieldnames)
-            data_writer.writeheader()
+
+            for word in fieldnames:
+                if ',' in word:
+                    word = '"' + word + '"'
+                data_csv.write(word + ",")
+            data_csv.write(UNK + "\n")
 
             for username in self.user_data:
-                data_writer.writerow(self.user_data[username])
+                data = self.user_data[username]
+                for word in fieldnames:
+                    data_csv.write(str(data[word]) + ",")
+                data_csv.write(str(data[UNK]) + "\n")
+
                 user_csv.write(username + "\n")
                 
     '''
