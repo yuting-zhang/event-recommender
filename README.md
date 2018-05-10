@@ -44,11 +44,11 @@ Video presentation for this project can be found here [link to be added]. Note y
 
 # Contributors
 
-Yuting Zhang - [contributions to be added]
+Yuting Zhang - Data scraping, recommender framework.
 
-Lan Dao - [contributions to be added]
+Lan Dao - Data preprocessing, feedback updating.
 
-Shunping Xie - [contributions to be added]
+Shunping Xie - Flask server, BM25
 
 # MIT License
 
