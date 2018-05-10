@@ -13,7 +13,7 @@ List of all interests and the corresponding names in db and dict
 bp = Blueprint('model', __name__)
 column_names = ['Artifical Intelligence', 'Machine Learning', 'Big Data', 'Algorithms', \
         'Augmented/Virtual Reality', 'Graphics', 'Biology', 'Linguistics', 'Statistics', 'Mathematics', 'Economics']
-stemmed_names = [['artifici','intellig'], ['machin'], ['big','data','scale'], ['algorithm'], \
+stemmed_names = [['artifici','intellig'], ['machin'], ['big','data'], ['algorithm'], \
         ['virtual','realiti'], ['graphic','numeric','imag'], ['biolog','biologist','biologes'], \
         ['linguist','linguistician','languag'], ['statist'], ['math','mathemat','mathematic'], ['economi','economist']]
 db_names = ['ai', 'ml', 'big_data', 'algos', 'ar_vr', 'graphics', 'bio', 'linguistics', 'stats', 'math', 'econ']
