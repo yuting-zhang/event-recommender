@@ -148,6 +148,40 @@ class Recommender:
             """
         return events
 
+    '''
+    get word count of a given doc
+    '''
+    def get_word_count(self, doc):
+        # currently treat all fields as the same
+        doc_dict = {}
+        for field in doc:
+            for word in field.split():
+                if not word in self.dictionary:
+                    word = UNK
+                if word in doc_dict:
+                    doc_dict[word] += 1.0
+                else:
+                    doc_dict[word] = 1.0
+        return doc_dict
+        
+    '''
+    update user's profile vector
+    '''
+    def update_profile_vector(self, username, lst_rel, lst_non_rel):
+        for word in self.user_data[username]:
+            self.user_data[username][word] *= self.alpha
+
+        w = self.beta / len(lst_rel)
+        for idx in lst_non_rel:
+            doc_dict = self.get_word_count(self.test_docs_stemmed[idx])
+            for word in doc_dict:
+                self.user_data[username][word] -= w * doc_dict[word]
+
+        w = self.gamma / len(lst_non_rel)
+        for idx in lst_rel:
+            doc_dict = self.get_word_count(self.test_docs_stemmed[idx])
+            for word in doc_dict:
+                self.user_data[username][word] -= w * doc_dict[word]
 
 if __name__ == "__main__":
     rec = Recommender()
