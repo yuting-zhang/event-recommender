@@ -174,15 +174,15 @@ class Recommender:
         for word in self.user_data[username]:
             self.user_data[username][word] *= self.alpha
 
-        if len(lst_rel) > 0:
-            w = self.beta / len(lst_rel)
+        if len(lst_non_rel) > 0:
+            w = self.gamma / len(lst_non_rel)
             for idx in lst_non_rel:
                 doc_dict = self.get_word_count(self.test_docs_stemmed[idx])
                 for word in doc_dict:
                     self.user_data[username][word] -= w * doc_dict[word]
 
-        if len(lst_non_rel) > 0:
-            w = self.gamma / len(lst_non_rel)
+        if len(lst_rel) > 0:
+            w = self.beta / len(lst_rel)
             for idx in lst_rel:
                 doc_dict = self.get_word_count(self.test_docs_stemmed[idx])
                 for word in doc_dict:
