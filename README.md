@@ -40,7 +40,7 @@ Full documentation can be found in the [Wiki](https://github.com/yuting-zhang/ev
 
 # Video Presentation
 
-Video presentation for this project can be found [here](https://mediaspace.illinois.edu/media/t/1_46opk1p0). Note you need UIUC account to open this link.
+Video presentation for this project can be found [here](https://mediaspace.illinois.edu/media/t/1_46opk1p0/91021621). Note you need UIUC account to open this link.
 
 # Contributors
 
